@@ -1,0 +1,28 @@
+# 依赖
+node_modules/
+
+# npm 本机环境配置（如 strict-ssl）
+.npmrc
+
+# 构建产物
+dist/
+.dts-tmp/
+*.tsbuildinfo
+
+# 环境变量（含真实密钥，绝不提交）
+.env
+.env.local
+.env.*.local
+
+# 日志与进程
+*.log
+*.pid
+npm-debug.log*
+
+# 系统与编辑器
+.DS_Store
+.vscode/
+.idea/
+
+# 临时目录
+/tmp/
