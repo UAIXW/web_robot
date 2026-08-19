@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite'
 import { resolve } from 'node:path'
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   build: {
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
@@ -15,7 +15,9 @@ export default defineConfig({
     outDir: 'dist',
     emptyOutDir: true,
     minify: 'esbuild',
-    // 生产分发不生成 sourcemap：map 体积约是产物的 3 倍，且 SDK 源码本就在仓库内可查
-    sourcemap: false,
+    // 开发态（--mode development，即 npm run dev）生成 sourcemap，
+    // 便于声明式 <script> 调试时把 dist 报错映射回源码；
+    // 生产态（npm run build）不生成，避免发布包体积膨胀。
+    sourcemap: mode === 'development',
   },
-})
+}))

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Robotik 声明式调试</title>
+  <style>
+    body { font-family: system-ui, -apple-system, sans-serif; margin: 40px; color: #333; line-height: 1.7; }
+    h1 { font-size: 20px; }
+    code { background: #f4f4f4; padding: 2px 6px; border-radius: 4px; font-size: 13px; }
+    .tip { color: #888; font-size: 13px; margin-top: 24px; border-top: 1px dashed #ddd; padding-top: 12px; }
+  </style>
+</head>
+<body>
+  <h1>Robotik 声明式接入调试页</h1>
+  <p>右下角应出现悬浮机器人。改动 <code>robotik-sdk/src</code> 后，<code>npm run dev</code> 会自动重新打包 <code>dist/robot.js</code>，刷新本页即可看到效果。</p>
+  <p>直接修改下面 <code>&lt;script&gt;</code> 的 <code>data-*</code> 属性可验证不同配置（appId / server / name / greeting / suggestions / theme-primary）。</p>
+
+  <!-- 声明式接入：改这里的 data-* 即可验证配置 -->
+  <script
+    src="/robotik-sdk/dist/robot.js"
+    data-app-id="default"
+    data-server="http://localhost:8787"
+    data-name="调试助手"
+    data-greeting="你好，这是声明式调试页 🤖"
+    data-suggestions="现在几点,echo 你好,计算 1+2"
+    data-theme-primary="#41e58f"
+  ></script>
+
+  <div class="tip">
+    调试说明：开发态已开启 sourcemap，浏览器 DevTools 里 <code>dist/robot.js</code> 的报错堆栈会映射回 <code>src/*.ts</code> 源码。
+  </div>
+</body>
+</html>

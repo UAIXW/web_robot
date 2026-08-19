@@ -10,6 +10,7 @@ ROOT_DIR="$(cd "$(dirname "$0")" && pwd)"
 # 端口配置
 PORT_SERVER=8787
 PORT_ADMIN=5173
+PORT_DEMO=4000
 PORT_KNOWLEDGE=5176
 PORT_VUE=5174
 PORT_REACT=5175
@@ -54,6 +55,15 @@ start_admin() {
   echo -e "  日志: tail -f /tmp/robotik-admin.log"
 }
 
+start_demo() {
+  echo -e "${CYAN}▶ 启动 apps/demo (port ${PORT_DEMO})${NC}"
+  kill_port $PORT_DEMO "demo-app"
+  cd "$ROOT_DIR/apps/demo"
+  npm run dev > /tmp/robotik-demo.log 2>&1 &
+  echo $! > /tmp/robotik-demo.pid
+  echo -e "${GREEN}✓ demo app PID=$(cat /tmp/robotik-demo.pid) → http://localhost:${PORT_DEMO}${NC}"
+}
+
 start_knowledge() {
   echo -e "${CYAN}▶ 启动 apps/knowledge (port ${PORT_KNOWLEDGE})${NC}"
   kill_port $PORT_KNOWLEDGE "knowledge-app"
@@ -83,7 +93,7 @@ start_react() {
 
 stop_all() {
   echo -e "${YELLOW}■ 停止所有服务...${NC}"
-  for name in server admin knowledge vue react; do
+  for name in server admin demo knowledge vue react; do
     local pidfile="/tmp/robotik-${name}.pid"
     if [ -f "$pidfile" ]; then
       local pid=$(cat "$pidfile")
@@ -99,8 +109,8 @@ stop_all() {
 
 show_status() {
   echo -e "${CYAN}═══ Robotik 服务状态 ═══${NC}"
-  local names=("robotik-server" "robotik-admin" "knowledge-app" "vue3-example" "react-example")
-  local ports=($PORT_SERVER $PORT_ADMIN $PORT_KNOWLEDGE $PORT_VUE $PORT_REACT)
+  local names=("robotik-server" "robotik-admin" "demo-app" "knowledge-app" "vue3-example" "react-example")
+  local ports=($PORT_SERVER $PORT_ADMIN $PORT_DEMO $PORT_KNOWLEDGE $PORT_VUE $PORT_REACT)
   for i in "${!names[@]}"; do
     name="${names[$i]}"
     port="${ports[$i]}"
@@ -119,6 +129,9 @@ case "${1:-all}" in
     ;;
   admin)
     start_admin
+    ;;
+  demo)
+    start_demo
     ;;
   knowledge)
     start_knowledge
@@ -141,11 +154,12 @@ case "${1:-all}" in
     show_status
     ;;
   *)
-    echo "用法: ./dev.sh [all|server|admin|knowledge|vue|react|stop|status]"
+    echo "用法: ./dev.sh [all|server|admin|demo|knowledge|vue|react|stop|status]"
     echo ""
     echo "  all        启动 server + admin (默认)"
     echo "  server     启动后端服务    → :8787"
     echo "  admin      启动管理后台    → :5173"
+    echo "  demo       启动 SDK 调试页  → :4000 (ESM + HMR)"
     echo "  knowledge  启动知识库应用  → :5176"
     echo "  vue        启动 Vue3 示例  → :5174"
     echo "  react      启动 React 示例 → :5175"

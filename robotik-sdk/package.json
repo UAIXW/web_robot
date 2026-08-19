@@ -19,7 +19,7 @@
     }
   },
   "scripts": {
-    "dev": "vite build --watch",
+    "dev": "vite build --watch --mode development",
     "build": "tsc --noEmit && vite build && tsc --emitDeclarationOnly --outDir .dts-tmp && node rollup.dts.config.mjs && rm -rf .dts-tmp",
     "typecheck": "tsc --noEmit",
     "format": "prettier --write 'src/**/*.ts'",
